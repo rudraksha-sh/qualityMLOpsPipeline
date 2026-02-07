@@ -15,7 +15,7 @@ fault_columns = [
 ]
 
 # Create binary target: 1 = defective, 0 = good
-df["Defective"] = df[fault_columns].max(axis=1)
+df["Defective"] = (df[fault_cols].sum(axis=1) >= 2).astype(int)
 
 # Features = drop fault columns
 X = df.drop(columns=fault_columns + ["Defective"])
