@@ -1,0 +1,17 @@
+data:
+  raw_path: data/raw/faults.csv
+  loaded_path: data/processed/loaded.csv
+  cleaned_path: data/processed/cleaned.csv
+
+training:
+  test_size: 0.2
+  random_state: 42
+
+model:
+  type: random_forest
+  n_estimators: 200
+  max_depth: 12
+
+
+evaluation:
+  metric: f1

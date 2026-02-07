@@ -1,0 +1,43 @@
+stages:
+  load:
+    cmd: python src/data_load.py
+    deps:
+      - src/data_load.py
+      - data/raw/faults.csv
+    outs:
+      - data/processed/loaded.csv
+
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/processed/loaded.csv
+    outs:
+      - data/processed/cleaned.csv
+
+  features:
+    cmd: python src/feature_engineering.py
+    deps:
+      - src/feature_engineering.py
+      - data/processed/cleaned.csv
+    outs:
+      - data/processed/X.csv
+      - data/processed/y.csv
+
+
+  train:
+    cmd: python src/train.py
+    deps:
+        - src/train.py
+        - data/processed/X.csv
+        - data/processed/y.csv
+        - params.yaml
+    outs:
+        - models/model.pkl
+
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl

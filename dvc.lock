@@ -1,0 +1,89 @@
+schema: '2.0'
+stages:
+  load:
+    cmd: python src/data_load.py
+    deps:
+    - path: data/raw/faults.csv
+      hash: md5
+      md5: d35e72f3880bf1b80d51981868ff6844
+      size: 298004
+    - path: src/data_load.py
+      hash: md5
+      md5: 8ebd64286f87a7cc2c8b17186aa640ef
+      size: 458
+    outs:
+    - path: data/processed/loaded.csv
+      hash: md5
+      md5: fd6baa758435cb73c2388b8fa9cd0b66
+      size: 307328
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/processed/loaded.csv
+      hash: md5
+      md5: fd6baa758435cb73c2388b8fa9cd0b66
+      size: 307328
+    - path: src/preprocess.py
+      hash: md5
+      md5: 972bb25793d6f1bf155a804fd50ac64e
+      size: 420
+    outs:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: fd6baa758435cb73c2388b8fa9cd0b66
+      size: 307328
+  features:
+    cmd: python src/feature_engineering.py
+    deps:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: fd6baa758435cb73c2388b8fa9cd0b66
+      size: 307328
+    - path: src/feature_engineering.py
+      hash: md5
+      md5: 8561c8a14ea10fa01688a28c77f8109c
+      size: 762
+    outs:
+    - path: data/processed/X.csv
+      hash: md5
+      md5: a4e42157f9849cef510faed1b4e1e3a8
+      size: 280092
+    - path: data/processed/y.csv
+      hash: md5
+      md5: 4d83096f4d68b3d096f24702983a0057
+      size: 5834
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed/X.csv
+      hash: md5
+      md5: a4e42157f9849cef510faed1b4e1e3a8
+      size: 280092
+    - path: data/processed/y.csv
+      hash: md5
+      md5: 4d83096f4d68b3d096f24702983a0057
+      size: 5834
+    - path: params.yaml
+      hash: md5
+      md5: 0e729fa1bd3fa1ff6025b176aa0ac330
+      size: 279
+    - path: src/train.py
+      hash: md5
+      md5: 4a3a98be905f0cb8183a92fe0549437d
+      size: 1621
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: a41c794234d6815613dc0fb6a9ebe62f
+      size: 74454
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: a41c794234d6815613dc0fb6a9ebe62f
+      size: 74454
+    - path: src/evaluate.py
+      hash: md5
+      md5: 85b8dd72dcd17efac920851857ccb3d1
+      size: 442
